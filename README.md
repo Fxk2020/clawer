@@ -166,15 +166,17 @@ ok，所有合规的文章已经全部爬取下来了，查看文章
 
 ![image-20230405201553619](https://oss-img-fxk.oss-cn-beijing.aliyuncs.com/markdown/image-20230405201553619.png)
 
+有的图片也可以正常显示：
+
+![image-20230425151434415](https://oss-img-fxk.oss-cn-beijing.aliyuncs.com/markdown/image-20230425151434415.png)
+
 yes舒服了。这下不怕没有文章看了，哈哈哈。
 
 ## 四、源代码
 
-----test.html和test2.html是爬取的无图片的网页
-
-----Demo16用于爬取有图片的文章
-
-----Demo17用于爬取无图片的文章
-
------Demo18用于将网页HTML转换为文章PDF
+- test.html和test2.html是爬取的无图片的网页
+- Demo16用于爬取有图片的文章
+- Demo17用于爬取无图片的文章
+- Demo18用于将网页HTML转换为文章PDF
+- 需要的类包和对应版本放到requestments.txt中了
 

@@ -238,6 +238,20 @@ selenium==3.141.0
   DB_CHARSET = "utf-8"
   ```
 
+### 4.2 结果
+
+数据库结构：
+
+![image-20230506212717241](https://oss-img-fxk.oss-cn-beijing.aliyuncs.com/markdown/image-20230506212717241.png)
+
+下载的公众号文章
+
+![image-20230506212958869](https://oss-img-fxk.oss-cn-beijing.aliyuncs.com/markdown/image-20230506212958869.png)
+
+![image-20230506213032730](https://oss-img-fxk.oss-cn-beijing.aliyuncs.com/markdown/image-20230506213032730.png)
+
+ok完美了
+
 ## 五、源代码
 
 - test.html和test2.html是爬取的无图片的网页

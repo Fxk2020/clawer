@@ -152,6 +152,12 @@ fiddler可以帮助我们抓取浏览器的请求：
 
 使用wechatsogou和pdfkit两个包将网页html代码直接转变为pdf文章，并保存到磁盘上。
 
+使用wechatsougo的错误--
+
+![image-20230506170049512](https://oss-img-fxk.oss-cn-beijing.aliyuncs.com/markdown/image-20230506170049512.png)
+
+[解决方案](https://github.com/Azure-Samples/ms-identity-python-webapp/issues/16)
+
 查看文章发现存在几篇文章并未下载的问题，查看日志：
 
 ![image-20230405201348895](https://oss-img-fxk.oss-cn-beijing.aliyuncs.com/markdown/image-20230405201348895.png)
@@ -172,11 +178,72 @@ ok，所有合规的文章已经全部爬取下来了，查看文章
 
 yes舒服了。这下不怕没有文章看了，哈哈哈。
 
-## 四、源代码
+--------------------------------------------------------------2023.5.6更新，手机获取专辑号，scrapy配合selenium自动化爬取+下载（完美版，所有文章都有图片）
+
+## 四 项目重构
+
+### 4.1使用scrapy对项目进行重构
+
+```python
+Scrapy==2.8.0
+selenium==3.141.0
+```
+
+- 使用fiddler从手机获取每个公众号专辑的id
+
+  ```
+  #起始网址
+  start_url = "https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzUyMzUyNzM4Ng==&action=getalbum&album_id="
+  
+  # 按照渤海小吏的专辑次序排列
+  album_ids = [
+      '1339909853384622082',
+      '1339904567118741505',
+      '1339922909934206977',
+      '1339936409721061378',
+      '1339959586404777985',
+      '1339972960463175682',
+      '1622271317351727106',
+      '2091728990028824579',
+      '2790568009419210757']
+  ```
+
+- 在item中，文章的题目地址和发布时间，文章图片的地址
+
+  ```python
+  article_title = scrapy.Field()
+  article_link = scrapy.Field()
+  article_time = scrapy.Field()
+  image_link = scrapy.Field()
+  ```
+
+- 在pipelines中，配置链接数据库并将数据输出到数据库中保存
+
+- 在DownloaderMiddleware中，使用selenium打开网址，并进行动态加载（滑动到最底端），返回网页源代码
+
+- util中封装了创建selenium驱动，向下滑动页面，将页面转换为pdf的方法
+
+- 爬虫使用BeautifulSoup对DownloaderMiddleware返回的网页源代码进行解析，返回每一项内容
+
+- 在setting中进行自己电脑的配置
+
+  ```
+  # selenium中webdriver的地址
+  WEBDRIVER_PATH = ''
+  # 数据库的相关配置
+  DB_HOST = ""
+  DB_USER = ""
+  DB_PASSWORD = ""
+  DB_DATABASE = ""
+  DB_CHARSET = "utf-8"
+  ```
+
+## 五、源代码
 
 - test.html和test2.html是爬取的无图片的网页
 - Demo16用于爬取有图片的文章
 - Demo17用于爬取无图片的文章
 - Demo18用于将网页HTML转换为文章PDF
 - 需要的类包和对应版本放到requestments.txt中了
+- 最新版放到了spiderWeChatPublic文件夹下
 

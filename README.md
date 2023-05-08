@@ -1,4 +1,4 @@
-# 爬取微信公众号--渤海小吏的文章
+# 爬取微信公众号专辑文章
 
 ## 一、目的
 
@@ -178,7 +178,9 @@ ok，所有合规的文章已经全部爬取下来了，查看文章
 
 yes舒服了。这下不怕没有文章看了，哈哈哈。
 
---------------------------------------------------------------2023.5.6更新，手机获取专辑号，scrapy配合selenium自动化爬取+下载（完美版，所有文章都有图片）
+--------------------------------------------------------------
+
+2023.5.6更新，手机获取专辑号，scrapy配合selenium自动化爬取+下载（完美版，所有文章都有图片）
 
 ## 四 项目重构
 
@@ -252,12 +254,101 @@ selenium==3.141.0
 
 ok完美了
 
+### 4.3 拓展
+
+发现不光可以爬取渤海小吏的文章，只要是微信公众号的专辑都可以爬取.
+
+爬取步骤如下
+
+#### 4.3.1 获取文章专辑号
+
+从手机获取文章的专辑号：
+
+- 找到请求url![image-20230508102037651](https://oss-img-fxk.oss-cn-beijing.aliyuncs.com/markdown/image-20230508102037651.png)
+
+- 找到对映的专辑号
+
+  ![image-20230508102101404](https://oss-img-fxk.oss-cn-beijing.aliyuncs.com/markdown/image-20230508102101404.png)
+
+![](https://oss-img-fxk.oss-cn-beijing.aliyuncs.com/markdown/image-20230508101554948.png)
+
+#### 4.3.2 更改数据库相关设置，修改表名
+
+#### 4.3.3 获取专辑号进行爬取
+
+```
+def readAlbumIds(url='C:\\Users\\yuanbao\\Desktop\\myGitHub\\clawer\\spiderWeChatPublic\\spiderWeChatPublic\\album_ids'):
+    result = []
+    with open(url, 'r', encoding='utf-8') as f:
+        for line in f:
+            result.append(line.strip('\n'))
+    return result
+```
+
+```
+# 按照渤海小吏的专辑次序排列
+all_album_ids = readAlbumIds()
+album_ids = all_album_ids[16:]
+```
+
+#### 4.3.4 进行下载
+
+```
+def url2pdf(item):
+    '''
+    使用pdfkit生成pdf文件
+    :param url: 文章url
+    :param title: 文章标题
+    :param targetPath: 存储pdf文件的路径
+    '''
+    url = item[1]
+    title = item[0]
+    targetPath = PDF_SAVE_URL+"{}.pdf".format(item[0])
+    try:
+        content_info = ws_api.get_article_content(url)
+        print("ok")
+    except:
+        print(url)
+        print("false")
+        return False
+    # 处理后的html
+    html = f'''
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{title}</title>
+    </head>
+    <body>
+    <h2 style="text-align: center;font-weight: 400;">{title}</h2>
+    {content_info['content_html']}
+    </body>
+    </html>
+    '''
+    try:
+        # path_wk = "E:/softwareAPP/wkhtmltopdf/bin/wkhtmltopdf.exe";
+        config = pdfkit.configuration()
+        pdfkit.from_string(input=html, output_path=targetPath, configuration=config)
+        print(title + "ok")
+    except:
+        # 部分文章标题含特殊字符，不能作为文件名
+        filename = datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.pdf'
+        pdfkit.from_string(html, PDF_SAVE_URL + filename, configuration=config)
+```
+
 ## 五、源代码
 
 - test.html和test2.html是爬取的无图片的网页
+
 - Demo16用于爬取有图片的文章
+
 - Demo17用于爬取无图片的文章
+
 - Demo18用于将网页HTML转换为文章PDF
+
 - 需要的类包和对应版本放到requestments.txt中了
+
+  ---------------------------------------------------------------------------------
+
 - 最新版放到了spiderWeChatPublic文件夹下
 

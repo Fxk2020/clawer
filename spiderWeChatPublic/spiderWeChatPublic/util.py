@@ -75,7 +75,7 @@ def url2pdf(item):
     '''
     url = item[1]
     title = item[0]
-    targetPath = "D:\\xiaoli\\new\\{}.pdf".format(item[0])
+    targetPath = PDF_SAVE_URL+"{}.pdf".format(item[0])
     try:
         content_info = ws_api.get_article_content(url)
         print("ok")
@@ -105,7 +105,7 @@ def url2pdf(item):
     except:
         # 部分文章标题含特殊字符，不能作为文件名
         filename = datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.pdf'
-        pdfkit.from_string(html, "D:\\xiaoli\\" + filename, configuration=config)
+        pdfkit.from_string(html, PDF_SAVE_URL + filename, configuration=config)
 
 
 def selectDbItems():
@@ -117,7 +117,7 @@ def selectDbItems():
     cursor = db.cursor()
 
     # SQL 插入语句
-    sql = "select * from wechatpublic"
+    sql = "select * from "+TABLE_NAME
     # print(sql)
     try:
         # 执行sql语句
@@ -136,7 +136,7 @@ def selectDbItems():
     return items
 
 
-if __name__ == '__main__':
+def getPdfs():
     items = selectDbItems()
     print(items)
     start = time.time()
@@ -147,3 +147,17 @@ if __name__ == '__main__':
     end = time.time()
 
     print(end - start)
+
+def readAlbumIds(url='C:\\Users\\yuanbao\\Desktop\\myGitHub\\clawer\\spiderWeChatPublic\\spiderWeChatPublic\\album_ids'):
+    result = []
+    with open(url, 'r', encoding='utf-8') as f:
+        for line in f:
+            result.append(line.strip('\n'))
+    return result
+
+
+if __name__ == '__main__':
+    # result = readAlbumIds("C:\\Users\\yuanbao\\Desktop\\myGitHub\\clawer\\spiderWeChatPublic\\spiderWeChatPublic\\album_ids")
+    # print(result)
+    # print(result[11:])
+    getPdfs()

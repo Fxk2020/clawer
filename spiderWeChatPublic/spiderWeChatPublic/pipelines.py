@@ -5,9 +5,14 @@
 
 
 # useful for handling different item types with a single interface
+import time
+
 import pymysql
 from itemadapter import ItemAdapter
+
+from spiderWeChatPublic import util
 from spiderWeChatPublic.settings import *
+
 
 class SpiderwechatpublicPipeline:
     def __init__(self):
@@ -26,6 +31,9 @@ class SpiderwechatpublicPipeline:
         if len(self.data) > 0:
             self.insertMany()
         self.conn.close()
+        time.sleep(10)
+        print("开始打印文档")
+        util.getPdfs()
 
     def open_spider(self, spider):
         """
@@ -54,6 +62,6 @@ class SpiderwechatpublicPipeline:
 
     def insertMany(self):
         # print('insert into `taobao` VALUES (%s, %s, %s, %s, %s, %s)', self.data)
-        self.cursor.executemany('insert into `wechatpublic` VALUES (%s, %s, %s, %s)', self.data)
+        self.cursor.executemany('insert into `' + TABLE_NAME + '` VALUES (%s, %s, %s, %s)', self.data)
         self.conn.commit()
         self.data.clear()

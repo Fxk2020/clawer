@@ -2,8 +2,10 @@ import re
 
 import scrapy
 from bs4 import BeautifulSoup
+from spiderWeChatPublic import util
 
 from spiderWeChatPublic.items import Article
+from spiderWeChatPublic.util import readAlbumIds
 
 
 class WechatpublicSpider(scrapy.Spider):
@@ -13,16 +15,8 @@ class WechatpublicSpider(scrapy.Spider):
 
     def start_requests(self):
         # 按照渤海小吏的专辑次序排列
-        album_ids = [
-            '1339909853384622082',
-            '1339904567118741505',
-            '1339922909934206977',
-            '1339936409721061378',
-            '1339959586404777985',
-            '1339972960463175682',
-            '1622271317351727106',
-            '2091728990028824579',
-            '2790568009419210757']
+        all_album_ids = readAlbumIds()
+        album_ids = all_album_ids[23:]
         for album_id in album_ids:
             yield scrapy.Request(self.start_url + "" + album_id)
 

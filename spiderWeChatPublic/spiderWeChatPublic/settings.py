@@ -13,7 +13,7 @@ SPIDER_MODULES = ["spiderWeChatPublic.spiders"]
 NEWSPIDER_MODULE = "spiderWeChatPublic.spiders"
 
 # selenium中webdriver的地址
-WEBDRIVER_PATH = ''  # F:\\Downloads\\Compressed\\chromedriver_win32\\chromedriver.exe
+WEBDRIVER_PATH = 'F:\\Downloads\\Compressed\\chromedriver_win32\\chromedriver.exe'  # F:\\Downloads\\Compressed\\chromedriver_win32\\chromedriver.exe
 # 数据库的相关配置
 DB_HOST = ""
 DB_USER = ""
@@ -21,7 +21,7 @@ DB_PASSWORD = ""
 DB_DATABASE = ""
 DB_CHARSET = "utf8"
 # pdf的保存目录
-PDF_SAVE_URL = ""  # D:\\wechatpublicarticle\\wanger\\
+PDF_SAVE_URL = ""  # D:\\wechatpublicarticles\\wanger\\
 # 数据库表名
 TABLE_NAME = ""  # wanger
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

@@ -16,7 +16,7 @@ class WechatpublicSpider(scrapy.Spider):
     def start_requests(self):
         # 按照渤海小吏的专辑次序排列
         all_album_ids = readAlbumIds()
-        album_ids = all_album_ids[23:]
+        album_ids = all_album_ids[27:]
         for album_id in album_ids:
             yield scrapy.Request(self.start_url + "" + album_id)
 

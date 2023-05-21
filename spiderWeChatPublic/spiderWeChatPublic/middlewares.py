@@ -73,7 +73,7 @@ class SpiderwechatpublicDownloaderMiddleware:
         return s
 
     def __init__(self):
-        self.browser = create_chrome_driver(headless=True)
+        self.browser = create_chrome_driver(headless=False)
 
     def __del__(self):
         self.browser.quit()

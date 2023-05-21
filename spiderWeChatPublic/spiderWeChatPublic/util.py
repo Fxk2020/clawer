@@ -10,6 +10,8 @@
 ------------      -------    --------   
 2023/5/6 14:23   fxk        1.0         
 '''
+import re
+
 import pymysql
 from selenium import webdriver
 from spiderWeChatPublic.settings import WEBDRIVER_PATH
@@ -19,6 +21,7 @@ import wechatsogou
 import multiprocessing
 import time
 from spiderWeChatPublic.settings import *
+
 
 ws_api = wechatsogou.WechatSogouAPI(captcha_break_time=3)
 
@@ -75,7 +78,10 @@ def url2pdf(item):
     '''
     url = item[1]
     title = item[0]
-    targetPath = PDF_SAVE_URL+"{}.pdf".format(item[0])
+    # 正则表达式提取中文防止文件名出现特殊格式字符
+    title = "".join(re.findall(r'[\u4e00-\u9fa5]+', title))
+    print(title)
+    targetPath = PDF_SAVE_URL + "{}.pdf".format(title)
     try:
         content_info = ws_api.get_article_content(url)
         print("ok")
@@ -100,9 +106,12 @@ def url2pdf(item):
     try:
         # path_wk = "E:/softwareAPP/wkhtmltopdf/bin/wkhtmltopdf.exe";
         config = pdfkit.configuration()
+        print(targetPath)
         pdfkit.from_string(input=html, output_path=targetPath, configuration=config)
-        print(title + "ok")
-    except:
+        print(title)
+        # print(title + "ok")
+    except OSError:
+        # print(title)
         # 部分文章标题含特殊字符，不能作为文件名
         filename = datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.pdf'
         pdfkit.from_string(html, PDF_SAVE_URL + filename, configuration=config)
@@ -117,7 +126,7 @@ def selectDbItems():
     cursor = db.cursor()
 
     # SQL 插入语句
-    sql = "select * from "+TABLE_NAME
+    sql = "select * from " + TABLE_NAME
     # print(sql)
     try:
         # 执行sql语句
@@ -148,7 +157,9 @@ def getPdfs():
 
     print(end - start)
 
-def readAlbumIds(url='C:\\Users\\yuanbao\\Desktop\\myGitHub\\clawer\\spiderWeChatPublic\\spiderWeChatPublic\\album_ids'):
+
+def readAlbumIds(
+        url='C:\\Users\\yuanbao\\Desktop\\myGitHub\\clawer\\spiderWeChatPublic\\spiderWeChatPublic\\album_ids'):
     result = []
     with open(url, 'r', encoding='utf-8') as f:
         for line in f:
